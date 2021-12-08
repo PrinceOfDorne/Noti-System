@@ -1,0 +1,38 @@
+{% extends "blog/base.html" %}
+{% block content %}
+{% if user.is_anonymous %}
+<h1 class="display-1">NOTIFICATION CREATION SYSTEM</h1>
+{% else %}
+<article class="media content-section">
+  <div class="media-body">
+    <h2>Create a New Notification</h2>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'query-create' %}">Create Notification</a>
+  </div>
+</article>
+{% endif %}
+    {% for query in queries %}
+    {% if query.creator == user %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ query.creator }}</a>
+              <small class="text-muted">{{ query.date_posted|date:"F d, Y" }}</small>
+            </div > 
+            <h2><span style="color:#283fa7;">Application Name:</span> {{ query.Application }}</h2>
+            <h3><span style="color:#283fa7;"> Notification Trigger : </span> {{ query.Notification }}</h3>
+            <h4><span style="color:#283fa7;">Creation Date : </span>{{ query.created|date:"F d, Y" }}</h4>
+            <h4><span style="color:#283fa7;">Expiry Date : </span>{{ query.expiry|date:"F d, Y" }}</h4>
+            {% if query.approved == True %}
+            <h4 ><span style="color:#283fa7;" >Approved by Admin : </span><span style="color:#28a745;">YES</span></h4>
+            {% else %}
+            <h4 ><span style="color:#283fa7;" >Approved by Admin : </span><span style="color:#dc3545;">NO</span></h4>
+            {% endif %}
+
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'query-update' query.id %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'query-delete' query.id %}">Delete</a>
+          </div>
+        </article>
+
+        {% endif %}
+    {% endfor %}
+{% endblock content %}
